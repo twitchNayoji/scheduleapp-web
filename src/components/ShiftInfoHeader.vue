@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="appdefault">
     <b-row>
       <b-col>
         <label for="input-constdaynum">連続勤務日数:</label>

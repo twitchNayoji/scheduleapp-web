@@ -1,5 +1,5 @@
 <template>
-  <div class="Shift">
+  <div class="Shift container-fluid" >
     <ShiftInfo :test = "$route.params.hashid"/>
   </div>
 </template>

@@ -1,17 +1,29 @@
 <template>
-  <div>
-    <form v-on:submit.prevent="addNewMember">
-      <label for="new-member">メンバー追加：</label>
-      <input v-model="newMemberName" id="new-member" placeholder="Name" />
-      <button>Add</button>
-    </form>
-    <ul id="member-list">
-      <li v-for="(item, index) in members" v-bind:key="item.id">
-        {{item.name}}
-        <b-button size="sm" @click="members.splice(index, 1)">削除</b-button>
-      </li>
-    </ul>
-  </div>
+  <b-container>
+    <b-col>
+      <b-row>
+        <b-col>
+          <h4>メンバー一覧</h4>
+        </b-col>
+        <b-col></b-col>
+      </b-row>
+      <b-row>
+        <b-col class="border border-white">
+          <form v-on:submit.prevent="addNewMember">
+            <label for="new-member">メンバー追加：</label>
+            <input v-model="newMemberName" id="new-member" placeholder="Name" />
+            <button>Add</button>
+          </form>
+          <ul id="member-list">
+            <li v-for="(item, index) in members" v-bind:key="item.id">
+              {{item.name}}
+              <b-button size="sm" @click="members.splice(index, 1)">削除</b-button>
+            </li>
+          </ul>
+        </b-col>
+      </b-row>
+    </b-col>
+  </b-container>
 </template>
 
 <script lang="ts">

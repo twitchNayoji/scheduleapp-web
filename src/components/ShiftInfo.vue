@@ -1,33 +1,39 @@
 <template>
-  <div>
-    <b-card
-      :title=" year +'年'+ month +'月のシフト表'"
-      tag="article"
-      style="max-width:80rem;"
-      class="mb-2 ShiftInfo"
-    >
-      <b-card-text>
-        <b-form>
-          <b-container>
-            <b-row>
-              <b-col>
-                <ShiftInfoHeader/>
-              </b-col>
-              <b-col cols="6">
-                <ShiftInfoMembers :inputmembers = "schedule.members"/>
-              </b-col>
-            </b-row>
-          </b-container>
-        </b-form>
-      </b-card-text>
-    </b-card>
-  </div>
+  <b-container class = "mt-2">
+    <b-row>
+      <b-card
+        :title=" year +'年'+ month +'月のシフト表'"
+        tag="article"
+        style="max-width:80rem;"
+        class="mb-2 ShiftInfo"
+      >
+        <b-card-text>
+          <b-form>
+            <b-container>
+              <b-row>
+                <b-col>
+                  <ShiftInfoHeader />
+                </b-col>
+                <b-col cols="6">
+                  <ShiftInfoMembers :inputmembers="schedule.members" />
+                </b-col>
+              </b-row>
+            </b-container>
+          </b-form>
+        </b-card-text>
+      </b-card>
+    </b-row>
+    <b-row>
+      <ShiftCalendar />
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ShiftInfoHeader from "@/components/ShiftInfoHeader.vue";
 import ShiftInfoMembers from "@/components/ShiftInfoMembers.vue";
+import ShiftCalendar from "@/components/ShiftCalendar.vue";
 
 function getSchedule(hashid: string) {
   // Todo Apiを叩いてスケジュールを取得
@@ -83,7 +89,7 @@ function getSchedule(hashid: string) {
   };
 }
 
-@Component({ components:{ShiftInfoHeader,ShiftInfoMembers }, })
+@Component({ components: { ShiftInfoHeader, ShiftInfoMembers, ShiftCalendar } })
 export default class ShiftInfo extends Vue {
   //Propは引数的な感じ
   @Prop() private hashid!: string;
