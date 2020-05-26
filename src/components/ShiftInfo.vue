@@ -23,9 +23,6 @@
         </b-card-text>
       </b-card>
     </b-row>
-    <b-row>
-      <ShiftCalendar />
-    </b-row>
   </b-container>
 </template>
 
@@ -33,7 +30,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ShiftInfoHeader from "@/components/ShiftInfoHeader.vue";
 import ShiftInfoMembers from "@/components/ShiftInfoMembers.vue";
-import ShiftCalendar from "@/components/ShiftCalendar.vue";
 
 function getSchedule(hashid: string) {
   // Todo Apiを叩いてスケジュールを取得
@@ -89,7 +85,7 @@ function getSchedule(hashid: string) {
   };
 }
 
-@Component({ components: { ShiftInfoHeader, ShiftInfoMembers, ShiftCalendar } })
+@Component({ components: { ShiftInfoHeader, ShiftInfoMembers } })
 export default class ShiftInfo extends Vue {
   //Propは引数的な感じ
   @Prop() private hashid!: string;

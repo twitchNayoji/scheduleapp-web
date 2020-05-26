@@ -10,7 +10,7 @@
       <b-col class="border border-white">金</b-col>
       <b-col class="border border-white">土</b-col>
     </b-row>
-    <b-row>
+    <b-row v-for="(weekItem,rowindex) of weeks" :key="rowindex">
       <b-col class="border border-white">
         <b-row>
           <b-col cols="12" class="text-center">日付</b-col>
@@ -24,9 +24,8 @@
           <b-col class="border border-white" cols="6">午後</b-col>
         </b-row>
       </b-col>
-      <b-col class="border border-white" v-for="(rowitem,rowindex) of 7" v-bind:key="rowindex" >
-        <!-- Todo 4週間分出す-->
-        <ShiftCalendarDay :day="rowindex+1" :members="shiftcalresult.reslt.daysMembers[rowitem].member" />
+      <b-col class="border border-white" v-for="(rowitem,rowindex) of 7" v-bind:key="rowindex">
+        <ShiftCalendarDay :day="weekItem[rowitem-1].day" :members="weekItem[rowitem-1].member" />
       </b-col>
     </b-row>
   </b-container>
@@ -36,19 +35,71 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ShiftCalendarDay from "@/components/ShiftCalendarDay.vue";
+import moment from "moment";
 
 @Component({ components: { ShiftCalendarDay } })
 export default class ShiftCalendar extends Vue {
+  // Weeks取得
+  get weeks() {
+    // yyyy
+    let dayStr: string = "" + this.shiftcalresult.reslt.year;
+    dayStr += "-";
+    // yyyy-m
+    dayStr += this.shiftcalresult.reslt.month;
+    // yyyy-m-d
+    dayStr += "-1";
+    const dayOfTheWeek: number = moment(dayStr, "YYYY-M-D").day();
+
+    // typeだと問題なし
+    type Day = {
+      day: number | null;
+      member: string[][];
+    };
+    const weeks = [];
+    let week = Array<Day>();
+    const blankDay: Day = {
+      day: null,
+      member: [
+        ["", ""],
+        ["", ""]
+      ]
+    };
+    //月初
+    for (let i = 0; i < dayOfTheWeek; i++) {
+      //dayOfTheWeekが土曜（6）の場合に、最大6個pushされる
+      week.push(blankDay);
+    }
+    //月中
+    this.shiftcalresult.reslt.daysMembers.forEach(daymember => {
+      week.push(daymember);
+      if (week.length >= 7) {
+        weeks.push(week);
+        week = Array<Day>();
+      }
+    });
+
+    //月末 最後のweekに詰めなおしてpush
+    if (week.length > 0 && week.length < 7) {
+      while (week.length < 7) {
+        week.push(blankDay);
+      }
+      weeks.push(week);
+    }
+    return weeks;
+  }
+
   // dayonemember
   // Todo しばらくこのまま使用する場合は、ファイルにしたほうがよい
   shiftcalresult = {
     reslt: {
+      year: 2020,
       month: 1,
       DoW: "1",
       dayNum: 30,
       peoplePerDay: 2,
       daysMembers: [
         {
+          day: 1,
           member: [
             ["honda", "kayo"],
             ["misaki", "nayoji"]
@@ -57,6 +108,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 2,
           member: [
             ["mayo", "igarashi"],
             ["gorilla", "kishi"]
@@ -65,6 +117,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 3,
           member: [
             ["zzz", "bb"],
             ["hoge", "tera"]
@@ -73,6 +126,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 4,
           member: [
             ["oyasumi", "kayo"],
             ["misaki", "nayoji"]
@@ -81,6 +135,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 5,
           member: [
             ["igarashi", "gorilla"],
             ["kishi", "honda"]
@@ -89,6 +144,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 6,
           member: [
             ["bb", "hoge"],
             ["tera", "mayo"]
@@ -97,6 +153,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 7,
           member: [
             ["oyasumi", "zzz"],
             ["misaki", "nayoji"]
@@ -105,6 +162,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 8,
           member: [
             ["gorilla", "kishi"],
             ["honda", "kayo"]
@@ -113,6 +171,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 9,
           member: [
             ["hoge", "tera"],
             ["mayo", "igarashi"]
@@ -121,6 +180,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 10,
           member: [
             ["oyasumi", "zzz"],
             ["bb", "nayoji"]
@@ -129,6 +189,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 11,
           member: [
             ["kishi", "honda"],
             ["kayo", "misaki"]
@@ -137,6 +198,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 12,
           member: [
             ["tera", "mayo"],
             ["igarashi", "gorilla"]
@@ -145,6 +207,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 13,
           member: [
             ["oyasumi", "zzz"],
             ["bb", "hoge"]
@@ -153,6 +216,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 14,
           member: [
             ["honda", "kayo"],
             ["misaki", "nayoji"]
@@ -161,6 +225,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 15,
           member: [
             ["mayo", "igarashi"],
             ["gorilla", "kishi"]
@@ -169,6 +234,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 16,
           member: [
             ["zzz", "bb"],
             ["hoge", "tera"]
@@ -177,6 +243,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 17,
           member: [
             ["oyasumi", "kayo"],
             ["misaki", "nayoji"]
@@ -185,6 +252,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 18,
           member: [
             ["igarashi", "gorilla"],
             ["kishi", "honda"]
@@ -193,6 +261,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 19,
           member: [
             ["bb", "hoge"],
             ["tera", "mayo"]
@@ -201,6 +270,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 20,
           member: [
             ["oyasumi", "zzz"],
             ["misaki", "nayoji"]
@@ -209,6 +279,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 21,
           member: [
             ["gorilla", "kishi"],
             ["honda", "kayo"]
@@ -217,6 +288,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 22,
           member: [
             ["hoge", "tera"],
             ["mayo", "igarashi"]
@@ -225,6 +297,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 23,
           member: [
             ["oyasumi", "zzz"],
             ["bb", "nayoji"]
@@ -233,6 +306,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 24,
           member: [
             ["kishi", "honda"],
             ["kayo", "misaki"]
@@ -241,6 +315,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 25,
           member: [
             ["tera", "mayo"],
             ["igarashi", "gorilla"]
@@ -249,6 +324,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 26,
           member: [
             ["oyasumi", "zzz"],
             ["bb", "hoge"]
@@ -257,6 +333,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 27,
           member: [
             ["honda", "kayo"],
             ["misaki", "nayoji"]
@@ -265,6 +342,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 28,
           member: [
             ["mayo", "igarashi"],
             ["gorilla", "kishi"]
@@ -273,6 +351,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 29,
           member: [
             ["zzz", "bb"],
             ["hoge", "tera"]
@@ -281,6 +360,7 @@ export default class ShiftCalendar extends Vue {
           memTotals: {}
         },
         {
+          day: 30,
           member: [
             ["oyasumi", "kayo"],
             ["misaki", "nayoji"]
