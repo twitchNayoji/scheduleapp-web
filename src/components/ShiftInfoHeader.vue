@@ -7,7 +7,7 @@
       <b-col>
         <b-form-input
           id="input-constdaynum"
-          v-model="form.maxseq"
+          v-model="value.maxseq"
           type="number"
           min="0"
           max="31"
@@ -25,15 +25,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Emit, Watch, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class ShiftInfoHeader extends Vue {
-  //Propは引数的な感じ
-  @Prop() private constdaynum!: number;
-  form =  {
-      maxseq: ""
-    }
+  // schedule設定を取得
+  @Prop() private value!: { maxseq: number };
+
+  @Emit("input")
+  getValue() {
+    console.log("maxseq changedaaaa>?");
+    return this.value;
+  }
 }
 </script>
 

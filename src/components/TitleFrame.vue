@@ -6,7 +6,9 @@
         </b-col>
       </b-row>
       <b-row>
+        <b-col class="border border-white pt-3 pb-3 mb-3 rounded-lg">
           <slot></slot>
+        </b-col>
       </b-row>
   </b-container>
 </template>
