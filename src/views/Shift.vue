@@ -9,64 +9,35 @@
 import { Component, Vue } from "vue-property-decorator";
 import ShiftInfo from "@/components/ShiftInfo.vue";
 import ShiftCalendarView from "@/components/ShiftCalendarView.vue";
+import ShiftSettingData from "@/domain/ShiftSettingData";
+import ShiftSettingRules from "@/domain/ShiftSettingRules";
+import ShiftSettingMember from "@/domain/ShiftSettingMember";
 
-function getSchedule(hashid: string) {
+function getSchedule(hashid: string): ShiftSettingData {
   // Todo Apiを叩いてスケジュールを取得
-  return {
-    _id: {
-      $oid: "5ead67ffe7179a42f1731274"
-    },
-    hash: "aaaaa",
-    year: "2020",
-    month: "1",
-    peopleperday: 2,
-    maxseq: 5,
-    members: [
-      {
-        id: 1,
-        name: "nayoji",
-        rules: [
-          {
-            category: "nottogether",
-            val1: [
-              {
-                id: 2
-              }
-            ],
-            val2: "",
-            val3: ""
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: "misaki",
-        rules: []
-      },
-      {
-        id: 3,
-        name: "kayo",
-        rules: []
-      },
-      {
-        id: 4,
-        name: "honda",
-        rules: []
-      }
-    ]
-  };
+
+  // セッティングルールデータクラスに設定
+  const hash = "aaaaa";
+  const year = 2020;
+  const month = 1;
+  const asigndaynum = 2;
+  const rules = new ShiftSettingRules({ maxseq: 5 });
+  const members = new Array<ShiftSettingMember>();
+  members.push(new ShiftSettingMember(1, "nayoji"));
+  members.push(new ShiftSettingMember(2, "misaki"));
+  members.push(new ShiftSettingMember(3, "kayo"));
+  members.push(new ShiftSettingMember(4, "honda"));
+
+  return new ShiftSettingData(hash, year, month, asigndaynum, rules, members);
 }
 
 @Component({ components: { ShiftInfo, ShiftCalendarView } })
 export default class Shift extends Vue {
-  schedule!: { maxseq: number };
-  retval!: { maxseq: number };
-
+  schedule!: ShiftSettingData;
   beforeCreate() {
     //スケジュールを取得
     this.schedule = getSchedule(this.$route.params.hashid);
   }
-
 }
 </script>
 

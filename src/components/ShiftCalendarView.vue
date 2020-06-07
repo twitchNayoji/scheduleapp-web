@@ -11,7 +11,7 @@
         <b-col cols="1">
           <b-button @click="beforecalendar" :disabled="calendarindex <= 0" v-if="calendardata">＜</b-button>
         </b-col>
-        <b-col cols="10"></b-col>
+        <b-col cols="10" class="text-center">{{calendarindex + 1}}ページ</b-col>
         <b-col cols="1">
           <b-button
             @click="nextcalendar"
@@ -31,6 +31,9 @@ import ShiftCalendar from "@/components/ShiftCalendar.vue";
 import TitleFrame from "@/components/TitleFrame.vue";
 import CalendarData from "@/domain/CalendarData";
 import CalendarDayData from "@/domain/CalendarDayData";
+import ShiftSettingData from "@/domain/ShiftSettingData";
+import ShiftSettingRules from "@/domain/ShiftSettingRules";
+import ShiftSettingMember from "@/domain/ShiftSettingMember";
 
 /**
  * カレンダーAPI叩いて取得
@@ -602,7 +605,7 @@ function getCalendarData(): CalendarData[] {
 @Component({ components: { ShiftCalendar, TitleFrame } })
 export default class ShiftCalendarView extends Vue {
   //Propは引数的な感じ
-  @Prop() private testval!: { maxseq: number };
+  @Prop() private testval!: ShiftSettingData;
   calendardata: CalendarData[] | null = null;
   calendarindex = 0;
   buttonbehave() {
@@ -610,7 +613,7 @@ export default class ShiftCalendarView extends Vue {
       "calendarindex : " +
         this.calendarindex +
         ", maxseq : " +
-        this.testval.maxseq
+        this.testval.rules.maxseq
     );
     if (!this.calendardata) {
       this.calendardata = getCalendarData();

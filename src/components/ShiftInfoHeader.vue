@@ -26,15 +26,15 @@
 
 <script lang="ts">
 import { Component, Emit, Watch, Prop, Vue } from "vue-property-decorator";
+import ShiftSettingRules from "@/domain/ShiftSettingRules";
 
 @Component
 export default class ShiftInfoHeader extends Vue {
   // schedule設定を取得
-  @Prop() private value!: { maxseq: number };
+  @Prop() private value!: ShiftSettingRules;
 
   @Emit("input")
   getValue() {
-    console.log("maxseq changedaaaa>?");
     return this.value;
   }
 }

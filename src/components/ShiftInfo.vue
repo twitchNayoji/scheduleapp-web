@@ -5,7 +5,7 @@
         <b-container>
           <b-row>
             <b-col>
-              <ShiftInfoHeader v-model="headerItems" />
+              <ShiftInfoHeader v-model="schedule.rules" />
             </b-col>
             <b-col cols="6">
               <ShiftInfoMembers :inputmembers="schedule.members" />
@@ -22,33 +22,26 @@ import { Component, Emit, Watch, Prop, Vue } from "vue-property-decorator";
 import ShiftInfoHeader from "@/components/ShiftInfoHeader.vue";
 import ShiftInfoMembers from "@/components/ShiftInfoMembers.vue";
 import TitleFrame from "@/components/TitleFrame.vue";
-
-type THeaderItem = { maxseq: number };
+import ShiftSettingData from "@/domain/ShiftSettingData";
+import ShiftSettingRules from "@/domain/ShiftSettingRules";
 
 @Component({ components: { ShiftInfoHeader, ShiftInfoMembers, TitleFrame } })
 export default class ShiftInfo extends Vue {
   // schedule設定を取得
-  @Prop() private schedule!: any;
+  @Prop() private schedule!: ShiftSettingData;
   //year
-  year = "";
+  year = 0;
   //month
-  month = "";
+  month = 0;
 
-  //headers
-  headerItems = {maxseq:null};
   created() {
     //スケジュールを取得
     this.year = this.schedule.year;
     this.month = this.schedule.month;
-    this.headerItems.maxseq = this.schedule.maxseq;
   }
 
-  @Watch("headerItems", { deep: true })
   @Emit("input")
   getSchedule() {
-    if (this.headerItems) {
-      this.schedule.maxseq = this.headerItems.maxseq;
-    }
     return this.schedule;
   }
 }
