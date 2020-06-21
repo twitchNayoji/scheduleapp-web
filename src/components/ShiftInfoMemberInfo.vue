@@ -21,8 +21,8 @@
         </b-col>
         <b-col>
           <b-form-input
-            id="aa"
-            v-model="value.testrulenum"
+            :id="'testrulenum'+value.id"
+            v-model="testnum"
             type="number"
             min="0"
             max="31"
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Emit, Vue } from "vue-property-decorator";
+import { Component, Prop, Watch, Emit, Vue } from "vue-property-decorator";
 import ShiftSettingMember from "@/domain/ShiftSettingMember";
 
 @Component
@@ -44,10 +44,21 @@ export default class ShiftInfoMemberInfo extends Vue {
   //Propは引数的な感じ
   @Prop() private value!: ShiftSettingMember;
   @Prop() private modalid!: string;
+  testnum: number | null = null;
 
   @Emit("input")
   getValue() {
     return this.value;
+  }
+  
+  // Todo：やばいwatchせずとも、valueをv-modelしたい。。。
+  @Watch("testnum")
+  updateValue() {
+    this.value.testrulenum = this.testnum;
+  }
+  
+  created() {
+    this.testnum = this.value.testrulenum;
   }
 }
 </script>

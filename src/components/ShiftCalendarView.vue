@@ -609,6 +609,9 @@ export default class ShiftCalendarView extends Vue {
   calendardata: CalendarData[] | null = null;
   calendarindex = 0;
   buttonbehave() {
+    if(!this.settingdata.members){
+      alert("undefined");
+    }
     alert(
       "calendarindex : " +
         this.calendarindex +

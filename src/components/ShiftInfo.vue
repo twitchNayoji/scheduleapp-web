@@ -8,7 +8,7 @@
               <ShiftInfoHeader v-model="schedule.rules" />
             </b-col>
             <b-col cols="6">
-              <ShiftInfoMembers :members="schedule.members" @input="val => schedule.members = val" />
+              <ShiftInfoMembers v-model="schedule.members" />
             </b-col>
           </b-row>
         </b-container>
