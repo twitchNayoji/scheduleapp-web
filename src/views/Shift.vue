@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4 mb-4 pt-2">
     <ShiftInfo :schedule="schedule" @input="val => schedule = val" />
-    <ShiftCalendarView :testval="schedule" />
+    <ShiftCalendarView :settingdata="schedule" />
   </div>
 </template>
 

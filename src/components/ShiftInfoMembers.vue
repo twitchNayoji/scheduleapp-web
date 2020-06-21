@@ -2,49 +2,61 @@
   <TitleFrame title="メンバー一覧">
     <label for="new-member">メンバー追加：</label>
     <input v-model="newMemberName" id="new-member" placeholder="Name" />
-    <b-button @click="addNewMember">Add</b-button>
+    <b-button @click="addNewMember()">Add</b-button>
     <ul id="member-list">
       <li v-for="(item, index) in members" v-bind:key="item.id">
-        {{item.name}}
-        <b-button size="sm" @click="members.splice(index, 1)">削除</b-button>
+        <b-row>
+          <b-col>
+            <ShiftInfoMemberInfo :modalid="modalId(index)" v-model="members[index]"/>
+          </b-col>
+          <b-col>
+            <b-button size="sm" @click="members.splice(index, 1)">削除</b-button>
+          </b-col>
+        </b-row>
       </li>
     </ul>
   </TitleFrame>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Emit, Vue } from "vue-property-decorator";
 import TitleFrame from "@/components/TitleFrame.vue";
+import ShiftInfoMemberInfo from "@/components/ShiftInfoMemberInfo.vue";
 import ShiftSettingMember from "@/domain/ShiftSettingMember";
 
-@Component({ components: { TitleFrame } })
+@Component({ components: { TitleFrame, ShiftInfoMemberInfo } })
 export default class ShiftInfoMembers extends Vue {
   //Propは引数的な感じ
-  @Prop() private inputmembers!: ShiftSettingMember[];
-  members = Array<{}>();
+  @Prop() private members!: ShiftSettingMember[];
   newMemberName = "";
-  nextMemberId = 1;
+  
+  getNextMemberId(): number {
+    //次のIDは最大値取得+1
+    if (this.members.length === 0) {
+      return 1;
+    }
+    return this.members.map(x => x.id).reduce((a, b) => (a > b ? a : b)) + 1;
+  }
+
   addNewMember() {
     if (this.newMemberName) {
       // Todo : 同じ名前いたらエラーにする
-      this.members.push({
-        id: this.nextMemberId++,
-        name: this.newMemberName
-      });
+      // ID重複しないようにしないと
+      this.members.push(
+        new ShiftSettingMember(this.getNextMemberId(), this.newMemberName)
+      );
       this.newMemberName = "";
     }
   }
 
-  created() {
-    this.inputmembers.forEach(x => {
-      this.members.push({
-        id: x.id,
-        name: x.name
-      });
-    });
-    //次のIDは最大値取得+1
-    this.nextMemberId =
-      this.inputmembers.map(x => x.id).reduce((a, b) => (a > b ? a : b)) + 1;
+  modalId(i: number) {
+    return "modal" + i;
+  }
+
+
+  @Emit("input")
+  getValue() {
+    return this.members;
   }
 }
 </script>

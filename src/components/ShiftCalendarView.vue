@@ -605,7 +605,7 @@ function getCalendarData(): CalendarData[] {
 @Component({ components: { ShiftCalendar, TitleFrame } })
 export default class ShiftCalendarView extends Vue {
   //Propは引数的な感じ
-  @Prop() private testval!: ShiftSettingData;
+  @Prop() private settingdata!: ShiftSettingData;
   calendardata: CalendarData[] | null = null;
   calendarindex = 0;
   buttonbehave() {
@@ -613,7 +613,9 @@ export default class ShiftCalendarView extends Vue {
       "calendarindex : " +
         this.calendarindex +
         ", maxseq : " +
-        this.testval.rules.maxseq
+        this.settingdata.rules.maxseq +
+        ", memberlength : " +
+        this.settingdata.members.length
     );
     if (!this.calendardata) {
       this.calendardata = getCalendarData();

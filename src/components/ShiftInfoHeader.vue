@@ -12,7 +12,7 @@
           min="0"
           max="31"
           required
-          placeholder="3"
+          placeholder="入力例：3"
         ></b-form-input>
       </b-col>
       <b-col></b-col>
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Emit, Watch, Prop, Vue } from "vue-property-decorator";
+import { Component, Emit, Prop, Vue } from "vue-property-decorator";
 import ShiftSettingRules from "@/domain/ShiftSettingRules";
 
 @Component
